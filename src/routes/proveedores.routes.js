@@ -5,9 +5,9 @@ const proveedoresController = require('../controllers/proveedores.controllers');
 
 
 router.get('/', proveedoresController.findAll);
-router.get('/:Idproveedores', proveedoresController.findById);
+router.get('/:Idproveedor', proveedoresController.findById);
 router.post('/', proveedoresController.create);
-router.put('/:Idproveedores', proveedoresController.update);
-router.delete('/:Idproveedores', proveedoresController.remove);
+router.put('/:Idproveedor', proveedoresController.update);
+router.delete('/:Idproveedor', proveedoresController.remove);
 
 module.exports = router;

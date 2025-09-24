@@ -10,8 +10,9 @@ exports.findAll = async (req, res) => {
 };
 
 exports.findById = async (req, res) => {
+    const IdVentaD = req.params.IdVentaD;
     try {
-        const ventaDet = await ventaDetService.findById(req.params.id);
+        const ventaDet = await ventaDetService.findById(req.params.IdVentaD);
         if (!ventaDet) {
             return res.status(404).json({ message: "ventaDet no encontrado" });
         }
@@ -32,8 +33,8 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updated = await ventaDetService.update(req.params.id, req.body);
-        if (!updated) {
+        const updatedventaDet = await ventaDetService.update(req.params.id, req.body);
+        if (!updatedventaDet) {
             return res.status(404).json({ message: "ventaDet no encontrado" });
         }
         res.status(200).json({ message: "ventaDet actualizado exitosamente" });
@@ -44,7 +45,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await ventaDetService.remove(req.params.id);
+        const removed = await ventaDetService.remove(req.params.IdVentaD);
         if (!removed) {
             return res.status(404).json({ message: "ventaDet no encontrado" });
         }

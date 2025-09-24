@@ -10,8 +10,12 @@ exports.findAll = async (req, res) => {
 };
 
 exports.findById = async (req, res) => {
+    const IdMetodoPago = req.params.IdMetodoPago;
+    if (!IdMetodoPago) {
+        return res.status(400).json({ message: "Falta el parámetro IdMetodoPago" });
+    }
     try {
-        const metodopago = await metodopagoService.findById(req.params.id);
+        const metodopago = await metodopagoService.findById(IdMetodoPago);
         if (!metodopago) {
             return res.status(404).json({ message: "metodopago no encontrado" });
         }
@@ -32,7 +36,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updated = await metodopagoService.update(req.params.id, req.body);
+        const updated = await metodopagoService.update(req.params.IdMetodoPago, req.body);
         if (!updated) {
             return res.status(404).json({ message: "metodopago no encontrado" });
         }
@@ -44,7 +48,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await metodopagoService.remove(req.params.id);
+        const removed = await metodopagoService.remove(req.params.IdMetodoPago);
         if (!removed) {
             return res.status(404).json({ message: "metodopago no encontrado" });
         }

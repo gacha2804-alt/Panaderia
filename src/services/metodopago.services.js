@@ -10,23 +10,23 @@ exports.findById = async (IdMetodoPago) => {
     return rows[0];
 };
 
-exports.create = async (newUser) => {
+exports.create = async (newmetodopago) => {
     const [result] = await db.execute(
-        'INSERT INTO metodopago (IdMetodoPago, NombMetodoPago) VALUES (?, ?)',
-        [newUser.IdMetodoPago, newUser.NombMetodoPago]
+        'INSERT INTO metodopago ( NombMetodoPago) VALUES (? )',
+        [ newmetodopago.NombMetodoPago]
     );
-    return { id: result.insertId, ...newUser };
+    return { id: result.insertId, ...newmetodopago };
 };
 
-exports.update = async (IdMetodoPago, updatedUser) => {
+exports.update = async (IdMetodoPago, updatedmetodopago) => {
     const [result] = await db.execute(
-        'UPDATE metodopago SET IdMetodoPago = ?, NombMetodoPago = ? WHERE id = ?',
-        [updatedUser.IdMetodoPago, updatedUser.NombMetodoPago, IdMetodoPago]
+        'UPDATE metodopago SET NombMetodoPago = ? WHERE IdMetodoPago = ?',
+        [ updatedmetodopago.NombMetodoPago, IdMetodoPago]
     );
     return result.affectedRows > 0;
 };
 
-exports.remove = async (id) => {
-    const [result] = await db.execute('DELETE FROM metodopago WHERE id = ?', [IdMetodoPago]); 
+exports.remove = async (IdMetodoPago) => {
+    const [result] = await db.execute('DELETE FROM metodopago WHERE IdMetodoPago= ?', [IdMetodoPago]); 
     return result.affectedRows > 0;
 };

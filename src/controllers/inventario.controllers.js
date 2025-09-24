@@ -10,8 +10,12 @@ exports.findAll = async (req, res) => {
 };
 
 exports.findById = async (req, res) => {
+    const IdInventario = req.params.IdInventario;
+    if (!IdInventario) {
+        return res.status(400).json({ message: "Falta el parámetro IdInventario" });
+    }   
     try {
-        const inventario = await inventarioService.findById(req.params.id);
+        const inventario = await inventarioService.findById(IdInventario);
         if (!inventario) {
             return res.status(404).json({ message: "Elemento de inventario no encontrado" });
         }
@@ -32,8 +36,8 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updated = await inventarioService.update(req.params.id, req.body);
-        if (!updated) {
+        const updatedinventario = await inventarioService.update(req.params.IdInventario, req.body);
+        if (!updatedinventario) {
             return res.status(404).json({ message: "Elemento de inventario no encontrado" });
         }
         res.status(200).json({ message: "Inventario actualizado exitosamente" });
@@ -44,7 +48,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await inventarioService.remove(req.params.id);
+        const removed = await inventarioService.remove(req.params.IdInventario);
         if (!removed) {
             return res.status(404).json({ message: "Elemento de inventario no encontrado" });
         }

@@ -8,10 +8,14 @@ exports.findAll = async (req, res) => {
         res.status(500).json({ message: "Error al obtener proveedores", error });
     }
 };
-
+//valida que el id este presente
 exports.findById = async (req, res) => {
+    const Idproveedor = req.params.Idproveedor;
+    if (!Idproveedor) {
+        return res.status(400).json({ message: "Falta el parámetro Idproveedor" });
+    }
     try {
-        const proveedores = await proveedoresService.findById(req.params.id);
+        const proveedores = await proveedoresService.findById(Idproveedor);
         if (!proveedores) {
             return res.status(404).json({ message: "proveedores no encontrado" });
         }
@@ -32,8 +36,8 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updated = await proveedoresService.update(req.params.id, req.body);
-        if (!updated) {
+        const updatedproveedores= await proveedoresService.update(req.params.Idproveedor, req.body);
+        if (!updatedproveedores) {
             return res.status(404).json({ message: "proveedores no encontrado" });
         }
         res.status(200).json({ message: "proveedores actualizado exitosamente" });
@@ -44,7 +48,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await proveedoresService.remove(req.params.id);
+        const removed = await proveedoresService.remove(req.params.Idproveedor);
         if (!removed) {
             return res.status(404).json({ message: "proveedores no encontrado" });
         }

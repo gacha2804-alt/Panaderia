@@ -5,28 +5,29 @@ exports.findAll = async () => {
     return rows;
 };
 
-exports.findById = async (IdEmpleados) => {
-    const [rows] = await db.execute('SELECT * FROM empleados WHERE id = ?', [IdEmpleados]);
+exports.findById = async (IdEmpleado) => {
+    const [rows] = await db.execute('SELECT * FROM empleados WHERE IdEmpleado = ?', [IdEmpleado]);
     return rows[0];
 };
 
-exports.create = async (newUser) => {
+exports.create = async (newempleados) => {
+    
     const [result] = await db.execute(
-        'INSERT INTO empleados (IdEmpleados, Salario) VALUES (?, ?)',
-        [newUser.IdEmpleados, newUser.Salario]
+        'INSERT INTO empleados ( Salario) VALUES ( ?)',
+        [newempleados.Salario]
     );
-    return { id: result.insertId, ...newUser };
+    return { id: result.insertId, ...newempleados };
 };
 
-exports.update = async (IdEmpleados, updatedUser) => {
+exports.update = async (IdEmpleado, updatedempleados) => {
     const [result] = await db.execute(
-        'UPDATE empleados SET IdEmpleados = ?, Salario = ? WHERE id = ?',
-        [updatedUser.IdEmpleados, updatedUser.Salario, IdEmpleados]
+        'UPDATE empleados SET Salario = ? WHERE IdEmpleado = ?',
+        [updatedempleados.Salario, IdEmpleado]
     );
     return result.affectedRows > 0;
 };
 
-exports.remove = async (IdEmpleados) => {
-    const [result] = await db.execute('DELETE FROM empleados WHERE IdEmpleados = ?', [IdEmpleados]); 
+exports.remove = async (IdEmpleado) => {
+    const [result] = await db.execute('DELETE FROM empleados WHERE IdEmpleado = ?', [IdEmpleado]); 
     return result.affectedRows > 0;
 };

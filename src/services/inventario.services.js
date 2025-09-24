@@ -5,28 +5,28 @@ exports.findAll = async () => {
     return rows;
 };
 
-exports.findById = async (id) => {
-    const [rows] = await db.execute('SELECT * FROM inventario WHERE IdInventario = ?', [id]);
+exports.findById = async (IdInventario) => {
+    const [rows] = await db.execute('SELECT * FROM inventario WHERE IdInventario = ?', [IdInventario]);
     return rows[0];
 };
 
-exports.create = async (newInventario) => {
+exports.create = async (newinventario) => {
     const [result] = await db.execute(
-        'INSERT INTO inventario (IdProducto, Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida) VALUES (?, ?, ?, ?, ?, ?)',
-        [newInventario.IdProducto, newInventario.Descripcion, newInventario.TipoProductos, newInventario.Cantidad, newInventario.FechaEntrada, newInventario.FechaSalida]
+        'INSERT INTO inventario ( Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida) VALUES ( ?, ?, ?, ?, ?)',
+        [ newinventario.Descripcion, newinventario.TipoProductos, newinventario.Cantidad, newinventario.FechaEntrada, newinventario.FechaSalida]
     );
-    return { IdInventario: result.insertId, ...newInventario };
+    return { id: result.insertId, ...newinventario };
 };
 
-exports.update = async (id, updatedInventario) => {
+exports.update = async (IdInventario, updatedinventario) => {
     const [result] = await db.execute(
-        'UPDATE inventario SET IdProducto = ?, Descripcion = ?, TipoProductos = ?, Cantidad = ?, FechaEntrada = ?, FechaSalida = ? WHERE IdInventario = ?',
-        [updatedInventario.IdProducto, updatedInventario.Descripcion, updatedInventario.TipoProductos, updatedInventario.Cantidad, updatedInventario.FechaEntrada, updatedInventario.FechaSalida, id]
+        'UPDATE inventario SET  Descripcion = ?, TipoProductos = ?, Cantidad = ?, FechaEntrada = ?, FechaSalida = ? WHERE Idinventario = ?',
+        [updatedinventario.Descripcion, updatedinventario.TipoProductos, updatedinventario.Cantidad, updatedinventario.FechaEntrada, updatedinventario.FechaSalida, IdInventario]
     );
     return result.affectedRows > 0;
 };
 
-exports.remove = async (id) => {
-    const [result] = await db.execute('DELETE FROM inventario WHERE IdInventario = ?', [id]);
+exports.remove = async (IdInventario) => {
+    const [result] = await db.execute('DELETE FROM inventario WHERE IdInventario = ?', [IdInventario]);
     return result.affectedRows > 0;
 };

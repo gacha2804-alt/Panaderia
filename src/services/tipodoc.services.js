@@ -10,18 +10,18 @@ exports.findById = async (IdTipoDoc) => {
     return rows[0];
 };
 
-exports.create = async (newUser) => { 
+exports.create = async (newtipodoc) => { 
     const [result] = await db.execute(
         'INSERT INTO tipodoc (IdTipoDoc, NomTipoDoc) VALUES (?, ?)',
-        [newUser.IdTipoDoc, newUser.NomTipoDoc]
+        [newtipodoc.IdTipoDoc, newtipodoc.NomTipoDoc]
     );
-    return { id: result.insertId, ...newUser };
+    return { id: result.insertId, ...newtipodoc };
 };
 
-exports.update = async (IdTipoDoc, updatedUser) => {
+exports.update = async (IdTipoDoc, updatedtipodoc) => {
     const [result] = await db.execute(
-        'UPDATE tipodoc SET IdTipoDoc = ?, NomTipoDoc = ? WHERE IdTipoDoc= ?',
-        [updatedUser.IdTipoDoc, updatedUser.NomTipoDoc, IdTipoDoc]
+        'UPDATE tipodoc SET  NomTipoDoc = ? WHERE IdTipoDoc= ?',
+        [updatedtipodoc.NomTipoDoc, IdTipoDoc]
     );
     return result.affectedRows > 0;
 };

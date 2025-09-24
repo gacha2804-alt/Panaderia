@@ -1,34 +1,33 @@
 const db = require('../config/db.config');
 
 exports.findAll = async () => {
-    const [rows] = await db.execute('SELECT * FROM productos');
+    const [rows] = await db.execute('SELECT * FROM producto');
     return rows;
 };
 
 exports.findById = async (IdProducto) => {
-    const [rows] = await db.execute('SELECT * FROM productos WHERE IdProducto = ?', [IdProducto]);
+    const [rows] = await db.execute('SELECT * FROM producto WHERE IdProducto = ?', [IdProducto]);
     return rows[0];
 };
 
-exports.create = async (newUser) => {
-    // Quitar IdProducto porque debe ser auto-incremental
+exports.create = async (newproductos) => {
+    
     const [result] = await db.execute(
-        'INSERT INTO productos (NombreProducto, Cantidad, ValorUnitario, FechaVencimiento) VALUES (?, ?, ?, ?)',
-        [newUser.NombreProducto, newUser.Cantidad, newUser.ValorUnitario, newUser.FechaVencimiento]
+        'INSERT INTO producto (NombreProducto, Cantidad, ValorUnitario, FechaVencimiento) VALUES (?, ?, ?, ?)',
+        [newproductos.NombreProducto, newproductos.Cantidad, newproductos.ValorUnitario, newproductos.FechaVencimiento]
     );
-    return { IdProducto: result.insertId, ...newUser };
+    return { id: result.insertId, ...newproductos };
 };
 
-exports.update = async (IdProducto, updatedUser) => {
+exports.update = async (IdProducto, updatedproductos) => {
     const [result] = await db.execute(
-        'UPDATE productos SET NombreProducto = ?, Cantidad = ?, ValorUnitario = ?, FechaVencimiento = ? WHERE IdProducto = ?',
-        [updatedUser.NombreProducto, updatedUser.Cantidad, updatedUser.ValorUnitario, updatedUser.FechaVencimiento, IdProducto]
+        'UPDATE producto SET NombreProducto = ?, Cantidad = ?, ValorUnitario = ?, FechaVencimiento = ? WHERE IdProducto = ?',
+        [updatedproductos.NombreProducto, updatedproductos.Cantidad, updatedproductos.ValorUnitario, updatedproductos.FechaVencimiento, IdProducto]
     );
     return result.affectedRows > 0;
 };
 
 exports.remove = async (IdProducto) => {
-    // Corregir tabla: parece que es productos, no user
-    const [result] = await db.execute('DELETE FROM productos WHERE IdProducto = ?', [IdProducto]);
+    const [result] = await db.execute('DELETE FROM producto WHERE IdProducto = ?', [IdProducto]);
     return result.affectedRows > 0;
 };

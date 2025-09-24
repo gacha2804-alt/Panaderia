@@ -2,16 +2,20 @@ const empleadosService = require('../services/empleados.services');
 
 exports.findAll = async (req, res) => {
     try {
-        const empleadoss = await empleadosService.findAll();
-        res.status(200).json(empleadoss);
+        const empleados = await empleadosService.findAll();
+        res.status(200).json(empleados);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener empleados", error });
     }
 };
-
+//valida que el id este presente
 exports.findById = async (req, res) => {
+    const IdEmpleado = req.params.IdEmpleado;
+    if (!IdEmpleado) {
+        return res.status(400).json({ message: "Falta el parámetro IdEmpleado" });
+    }
     try {
-        const empleados = await empleadosService.findById(req.params.id);
+        const empleados = await empleadosService.findById(IdEmpleado);
         if (!empleados) {
             return res.status(404).json({ message: "empleados no encontrado" });
         }
@@ -32,8 +36,8 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updated = await empleadosService.update(req.params.id, req.body);
-        if (!updated) {
+        const updatedempleados = await empleadosService.update(req.params.IdEmpleado, req.body);
+        if (!updatedempleados) {
             return res.status(404).json({ message: "empleados no encontrado" });
         }
         res.status(200).json({ message: "empleados actualizado exitosamente" });
@@ -44,7 +48,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await empleadosService.remove(req.params.id);
+        const removed = await empleadosService.remove(req.params.IdEmpleado);
         if (!removed) {
             return res.status(404).json({ message: "empleados no encontrado" });
         }

@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Prefijo de la API y montaje de las rutas
+
 app.use('/api/users', userRoutes);
 app.use('/api/tipodoc', tipodocRoutes);
 app.use('/api/productos', productosRoutes);

@@ -10,18 +10,18 @@ exports.findById = async (IdVentaD) => {
     return rows[0];
 };
 
-exports.create = async (newUser) => {
+exports.create = async (newventaDet) => {
     const [result] = await db.execute(
-        'INSERT INTO ventaDet (IdVentaD, IdProducto, Cantidad, ValorUnitario, Total) VALUES (?, ?)',
-        [newUser.IdVentaD, newUser.IdProducto, newUser.Cantidad, newUser.ValorUnitario, newUser.Total]
+        'INSERT INTO ventaDet ( Cantidad, ValorUnitario, Total) VALUES (?, ?, ? )',
+        [  newventaDet.Cantidad, newventaDet.ValorUnitario, newventaDet.Total]
     );
-    return { id: result.insertId, ...newUser };
+    return { id: result.insertId, ...newventaDet };
 };
 
-exports.update = async (id, updatedUser) => {
+exports.update = async (IdVentaD, updatedventaDet) => {
     const [result] = await db.execute(
-        'UPDATE ventaDet SET IdVentaD = ?, IdProducto = ? WHERE id = ?',
-        [updatedUser.IdVentaD, updatedUser.IdProducto, updatedUser.Cantidad, updatedUser.ValorUnitario, updatedUser.Total, IdVentaD]
+        'UPDATE ventaDet SET  WHERE IdVentaD= ?',
+        [  updatedventaDet.Cantidad, updatedventaDet.ValorUnitario, updatedventaDet.Total, IdVentaD]
     );
     return result.affectedRows > 0;
 };
