@@ -1,59 +1,67 @@
-const empleadosService = require('../services/empleados.services'); 
+const empleadosService = require('../services/empleados.service');
+const empleadosService = new empleadosService();
 
-exports.findAll = async (req, res) => {
-    try {
-        const empleados = await empleadosService.findAll();
-        res.status(200).json(empleados);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener empleados", error });
-    }
-};
-//valida que el id este presente
-exports.findById = async (req, res) => {
-    const IdEmpleado = req.params.IdEmpleado;
-    if (!IdEmpleado) {
-        return res.status(400).json({ message: "Falta el parámetro IdEmpleado" });
-    }
-    try {
-        const empleados = await empleadosService.findById(IdEmpleado);
-        if (!empleados) {
-            return res.status(404).json({ message: "empleados no encontrado" });
+class empleadosController {
+    async getPublicProfile(req, res) {
+        try {
+            const empleadosId = req.params.id;
+            const profile = await empleadosService.getPublicProfile(empleadosId);
+            
+            if (!profile) {
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+            
+            res.json(profile);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
-        res.status(200).json(empleados);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener el empleados", error });
     }
-};
 
-exports.create = async (req, res) => {
-    try {
-        const newempleados = await empleadosService.create(req.body);
-        res.status(201).json(newempleados);
-    } catch (error) {
-        res.status(500).json({ message: "Error al crear empleados", error });
-    }
-};
-
-exports.update = async (req, res) => {
-    try {
-        const updatedempleados = await empleadosService.update(req.params.IdEmpleado, req.body);
-        if (!updatedempleados) {
-            return res.status(404).json({ message: "empleados no encontrado" });
+    async getProfile(req, res) {
+        try {
+            const profile = await empleadosService.getProfile(req.empleados.id);
+            res.json(profile);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
-        res.status(200).json({ message: "empleados actualizado exitosamente" });
-    } catch (error) {
-        res.status(500).json({ message: "Error al actualizar empleados", error });
     }
-};
 
-exports.remove = async (req, res) => {
-    try {
-        const removed = await empleadosService.remove(req.params.IdEmpleado);
-        if (!removed) {
-            return res.status(404).json({ message: "empleados no encontrado" });
+    async update(req, res) {
+        try {
+            const updatedempleados = await empleadosService.update(req.empleados.id, req.body);
+            res.json(updatedempleados);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
-        res.status(200).json({ message: "empleados eliminado exitosamente" });
-    } catch (error) {
-        res.status(500).json({ message: "Error al eliminar empleados", error });
     }
-};
+
+    async delete(req, res) {
+        try {
+            await empleadosService.delete(req.empleados.id);
+            res.json({ message: 'Usuario eliminado correctamente' });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async changePassword(req, res) {
+        try {
+            const { oldPassword, newPassword } = req.body;
+            await empleadosService.changePassword(req.empleados.id, oldPassword, newPassword);
+            res.json({ message: 'Contraseña actualizada correctamente' });
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
+    async getDashboard(req, res) {
+        try {
+            const dashboard = await empleadosService.getDashboard(req.empleados.id);
+            res.json(dashboard);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+}
+
+module.exports = new empleadosController();

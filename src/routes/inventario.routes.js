@@ -12,3 +12,8 @@ router.put('/:IdInventario', inventarioController.update);
 router.delete('/:IdInventario', inventarioController.remove);
 
 module.exports = router;
+
+
+
+
+
