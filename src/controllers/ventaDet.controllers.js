@@ -1,56 +1,71 @@
-const ventaDetService = require('../services/ventaDet.services'); 
+const VentaDetService = require('../services/ventaDet.services');
+const ventaDetService = new VentaDetService();
 
-exports.findAll = async (req, res) => {
-    try {
-        const ventaDets = await ventaDetService.findAll();
-        res.status(200).json(ventaDets);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener ventaDet", error });
-    }
-};
-
-exports.findById = async (req, res) => {
-    const IdVentaD = req.params.IdVentaD;
-    try {
-        const ventaDet = await ventaDetService.findById(req.params.IdVentaD);
-        if (!ventaDet) {
-            return res.status(404).json({ message: "ventaDet no encontrado" });
+class VentaDetController {
+    // PUBLICOS 
+    async findAll(req, res) {
+        try {
+            const ventaDets = await ventaDetService.findAll();
+            res.status(200).json(ventaDets);
+        } catch (error) {
+            res.status(500).json({ message: "Error al obtener los detalles de venta", error });
         }
-        res.status(200).json(ventaDet);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener el ventaDet", error });
     }
-};
 
-exports.create = async (req, res) => {
-    try {
-        const newventaDet = await ventaDetService.create(req.body);
-        res.status(201).json(newventaDet);
-    } catch (error) {
-        res.status(500).json({ message: "Error al crear ventaDet", error });
-    }
-};
+    async findById(req, res) {
+        try {
+            const { IdVentaD } = req.params;
+            const ventaDet = await ventaDetService.findById(IdVentaD);
 
-exports.update = async (req, res) => {
-    try {
-        const updatedventaDet = await ventaDetService.update(req.params.id, req.body);
-        if (!updatedventaDet) {
-            return res.status(404).json({ message: "ventaDet no encontrado" });
+            if (!ventaDet) {
+                return res.status(404).json({ message: "Detalle de venta no encontrado" });
+            }
+
+            res.status(200).json(ventaDet);
+        } catch (error) {
+            res.status(500).json({ message: "Error al obtener el detalle de venta", error });
         }
-        res.status(200).json({ message: "ventaDet actualizado exitosamente" });
-    } catch (error) {
-        res.status(500).json({ message: "Error al actualizar ventaDet", error });
     }
-};
 
-exports.remove = async (req, res) => {
-    try {
-        const removed = await ventaDetService.remove(req.params.IdVentaD);
-        if (!removed) {
-            return res.status(404).json({ message: "ventaDet no encontrado" });
+    // PRIVADO
+    async create(req, res) {
+        try {
+            const newVentaDet = await ventaDetService.create(req.body);
+            res.status(201).json(newVentaDet);
+        } catch (error) {
+            res.status(500).json({ message: "Error al crear detalle de venta", error });
         }
-        res.status(200).json({ message: "ventaDet eliminado exitosamente" });
-    } catch (error) {
-        res.status(500).json({ message: "Error al eliminar ventaDet", error });
     }
-};
+
+    async update(req, res) {
+        try {
+            const { IdVentaD } = req.params;
+            const updated = await ventaDetService.update(IdVentaD, req.body);
+
+            if (!updated) {
+                return res.status(404).json({ message: "Detalle de venta no encontrado" });
+            }
+
+            res.status(200).json({ message: "Detalle de venta actualizado exitosamente" });
+        } catch (error) {
+            res.status(500).json({ message: "Error al actualizar detalle de venta", error });
+        }
+    }
+
+    async delete(req, res) {
+        try {
+            const { IdVentaD } = req.params;
+            const removed = await ventaDetService.delete(IdVentaD);
+
+            if (!removed) {
+                return res.status(404).json({ message: "Detalle de venta no encontrado" });
+            }
+
+            res.status(200).json({ message: "Detalle de venta eliminado exitosamente" });
+        } catch (error) {
+            res.status(500).json({ message: "Error al eliminar detalle de venta", error });
+        }
+    }
+}
+
+module.exports = new VentaDetController();

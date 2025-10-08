@@ -10,23 +10,23 @@ exports.findById = async (IdVenta) => {
     return rows[0];
 };
 
-exports.create = async (newventaEncab) => {
+exports.create = async (newVentaEncab) => {
     const [result] = await db.execute(
-        'INSERT INTO ventaEncab ( FechaVenta) VALUES (?)',
-        [ newventaEncab.FechaVenta]
+        'INSERT INTO ventaEncab (Fecha, IdCliente, Total) VALUES (?, ?, ?)',
+        [newVentaEncab.Fecha, newVentaEncab.IdCliente, newVentaEncab.Total]
     );
-    return { id: result.insertId, ...newventaEncab };
+    return { IdVenta: result.insertId, ...newVentaEncab };
 };
 
-exports.update = async (IdVenta, updatedventaEncab) => {
+exports.update = async (IdVenta, updatedVentaEncab) => {
     const [result] = await db.execute(
-        'UPDATE ventaEncab SET  FechaVenta = ? WHERE IdVenta= ?',
-        [ updatedventaEncab.FechaVenta, IdVenta]
+        'UPDATE ventaEncab SET Fecha = ?, IdCliente = ?, Total = ? WHERE IdVenta = ?',
+        [updatedVentaEncab.Fecha, updatedVentaEncab.IdCliente, updatedVentaEncab.Total, IdVenta]
     );
     return result.affectedRows > 0;
 };
 
 exports.remove = async (IdVenta) => {
-    const [result] = await db.execute('DELETE FROM ventaEncab WHERE IdVenta = ?', [IdVenta]); 
+    const [result] = await db.execute('DELETE FROM ventaEncab WHERE IdVenta = ?', [IdVenta]);
     return result.affectedRows > 0;
 };
