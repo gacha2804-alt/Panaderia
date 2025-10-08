@@ -1,0 +1,20 @@
+#Dependencies
+/node_modules
+/npm-debug.log*
+/yarn-error.log
+# Production/Build Files
+/dist
+/Build
+# Environment files
+# Es CRUCIAL ignorar el archivo .env ya que contiene secretos (JWT_SECRRET, claves der BD, etc.)
+.env 
+# Runtime data
+/pids
+/logs
+*.pid
+*.seed
+*.log 
+# Editor/OS specific files (Archivods temporales del sistema o del autor)
+.DS_Store
+.vscode/
+# Nodemon ( si genera archivos temporales especifgivos, aunque generalmente no es necesario)
