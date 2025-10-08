@@ -1,0 +1,25 @@
+# Dependencies
+/node_modules
+/npm-debug.log*
+/yarn-error.log
+
+#production/buidd
+/dist
+/build
+
+# Environment files
+# Es crucial ignorar el archivo  .env ya que contiene secretos, esto hace que este archivo no se suba a ningun repositorio
+/.env
+
+#Runtime data
+/pids
+/logs   
+*.pid
+*.seed
+*.log
+
+# Editor (Archivos temporales del sistema operativo y editores de texto)
+.DS_Store
+.VSCode/
+#nodemon (si genera archivos temporales especificos, aunque generalmente no es necesario)
+.nodemon
