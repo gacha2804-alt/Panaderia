@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ventaEncabController = require('../controllers/ventaEncab.controllers'); 
+const ventaEncabController = require('../controllers/ventaEncab.controllers');
 
 router.get('/', ventaEncabController.findAll);
 router.get('/:IdVenta', ventaEncabController.findById);

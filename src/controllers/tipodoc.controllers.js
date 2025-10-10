@@ -1,8 +1,8 @@
-const tipodocService = require('../services/tipodoc.services');
+const tipodocServices = require('../services/tipodoc.services');
 
 exports.findAll = async (req, res) => {
     try {
-        const tipodocs = await tipodocService.findAll();
+        const tipodocs = await tipodocServices.findAll();
         res.status(200).json(tipodocs);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener usuarios", error });
@@ -15,7 +15,7 @@ exports.findById = async (req, res) => {
         return res.status(400).json({ message: "Falta el parámetro IdTipoDoc" });
     }
     try {
-        const tipodoc = await tipodocService.findById(IdTipoDoc);
+        const tipodoc = await tipodocServices.findById(IdTipoDoc);
         if (!tipodoc) {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }
@@ -27,8 +27,8 @@ exports.findById = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const newtipodoc = await tipodocService.create(req.body);
-        res.status(201).json(newtipodoc);
+        const newTipodoc = await tipodocServices.create(req.body);
+        res.status(201).json(newTipodoc);
     } catch (error) {
         res.status(500).json({ message: "Error al crear usuario", error });
     }
@@ -40,7 +40,7 @@ exports.update = async (req, res) => {
         return res.status(400).json({ message: "Falta el parámetro IdTipoDoc" });
     }
     try {
-        const updated = await tipodocService.update(IdTipoDoc, req.body);
+        const updated = await tipodocServices.update(IdTipoDoc, req.body);
         if (!updated) {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }
@@ -56,7 +56,7 @@ exports.remove = async (req, res) => {
         return res.status(400).json({ message: "Falta el parámetro IdTipoDoc" });
     }
     try {
-        const removed = await tipodocService.remove(IdTipoDoc);
+        const removed = await tipodocServices.remove(IdTipoDoc);
         if (!removed) {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }

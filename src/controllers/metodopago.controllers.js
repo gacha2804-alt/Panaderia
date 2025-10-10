@@ -1,67 +1,67 @@
-const metodopagoService = require('../services/metodopago.service');
-const metodopagoService = new metodopagoService();
+const metodoPagoServices = require('../services/metodopago.services');
 
-class metodopagoController {
-    async getPublicProfile(req, res) {
-        try {
-            const metodopagoId = req.params.id;
-            const profile = await metodopagoService.getPublicProfile(metodopagoId);
-            
-            if (!profile) {
-                return res.status(404).json({ message: 'Usuario no encontrado' });
-            }
-            
-            res.json(profile);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
+exports.findAll = async (req, res) => {
+    try {
+        const metodosPago = await metodoPagoServices.findAll();
+        res.status(200).json(metodosPago);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener métodos de pago", error });
     }
+};
 
-    async getProfile(req, res) {
-        try {
-            const profile = await metodopagoService.getProfile(req.metodopago.id);
-            res.json(profile);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
+exports.findById = async (req, res) => {
+    const IdMetodoPago = req.params.IdMetodoPago;
+    if (!IdMetodoPago) {
+        return res.status(400).json({ message: "Falta el parámetro IdMetodoPago" });
     }
-
-    async update(req, res) {
-        try {
-            const updatedmetodopago = await metodopagoService.update(req.metodopago.id, req.body);
-            res.json(updatedmetodopago);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
+    try {
+        const metodoPago = await metodoPagoServices.findById(IdMetodoPago);
+        if (!metodoPago) {
+            return res.status(404).json({ message: "Método de pago no encontrado" });
         }
+        res.status(200).json(metodoPago);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener el método de pago", error });
     }
+};
 
-    async delete(req, res) {
-        try {
-            await metodopagoService.delete(req.metodopago.id);
-            res.json({ message: 'Usuario eliminado correctamente' });
-        } catch (error) {
-            res.status(500).json({ message: error.message });
+exports.create = async (req, res) => {
+    try {
+        const newMetodoPago = await metodoPagoServices.create(req.body);
+        res.status(201).json(newMetodoPago);
+    } catch (error) {
+        res.status(500).json({ message: "Error al crear método de pago", error });
+    }
+};
+
+exports.update = async (req, res) => {
+    const IdMetodoPago = req.params.IdMetodoPago;
+    if (!IdMetodoPago) {
+        return res.status(400).json({ message: "Falta el parámetro IdMetodoPago" });
+    }
+    try {
+        const updated = await metodoPagoServices.update(IdMetodoPago, req.body);
+        if (!updated) {
+            return res.status(404).json({ message: "Método de pago no encontrado" });
         }
+        res.status(200).json({ message: "Método de pago actualizado exitosamente" });
+    } catch (error) {
+        res.status(500).json({ message: "Error al actualizar método de pago", error });
     }
+};
 
-    async changePassword(req, res) {
-        try {
-            const { oldPassword, newPassword } = req.body;
-            await metodopagoService.changePassword(req.metodopago.id, oldPassword, newPassword);
-            res.json({ message: 'Contraseña actualizada correctamente' });
-        } catch (error) {
-            res.status(400).json({ message: error.message });
+exports.remove = async (req, res) => {
+    const IdMetodoPago = req.params.IdMetodoPago;
+    if (!IdMetodoPago) {
+        return res.status(400).json({ message: "Falta el parámetro IdMetodoPago" });
+    }
+    try {
+        const removed = await metodoPagoServices.remove(IdMetodoPago);
+        if (!removed) {
+            return res.status(404).json({ message: "Método de pago no encontrado" });
         }
+        res.status(200).json({ message: "Método de pago eliminado exitosamente" });
+    } catch (error) {
+        res.status(500).json({ message: "Error al eliminar método de pago", error });
     }
-
-    async getDashboard(req, res) {
-        try {
-            const dashboard = await metodopagoService.getDashboard(req.metodopago.id);
-            res.json(dashboard);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    }
-}
-
-module.exports = new metodopagoController();
+};

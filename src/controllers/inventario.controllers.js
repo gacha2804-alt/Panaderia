@@ -1,67 +1,67 @@
-const inventarioService = require('../services/inventario.service');
-const inventarioService = new inventarioService();
+const inventarioServices = require('../services/inventario.services');
 
-class inventarioController {
-    async getPublicProfile(req, res) {
-        try {
-            const inventarioId = req.params.id;
-            const profile = await inventarioService.getPublicProfile(inventarioId);
-            
-            if (!profile) {
-                return res.status(404).json({ message: 'Usuario no encontrado' });
-            }
-            
-            res.json(profile);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
+exports.findAll = async (req, res) => {
+    try {
+        const inventario = await inventarioServices.findAll();
+        res.status(200).json(inventario);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener inventario", error });
     }
+};
 
-    async getProfile(req, res) {
-        try {
-            const profile = await inventarioService.getProfile(req.inventario.id);
-            res.json(profile);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
+exports.findById = async (req, res) => {
+    const IdInventario = req.params.IdInventario;
+    if (!IdInventario) {
+        return res.status(400).json({ message: "Falta el parámetro IdInventario" });
     }
-
-    async update(req, res) {
-        try {
-            const updatedinventario = await inventarioService.update(req.inventario.id, req.body);
-            res.json(updatedinventario);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
+    try {
+        const item = await inventarioServices.findById(IdInventario);
+        if (!item) {
+            return res.status(404).json({ message: "Inventario no encontrado" });
         }
+        res.status(200).json(item);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener el inventario", error });
     }
+};
 
-    async delete(req, res) {
-        try {
-            await inventarioService.delete(req.inventario.id);
-            res.json({ message: 'Usuario eliminado correctamente' });
-        } catch (error) {
-            res.status(500).json({ message: error.message });
+exports.create = async (req, res) => {
+    try {
+        const newItem = await inventarioServices.create(req.body);
+        res.status(201).json(newItem);
+    } catch (error) {
+        res.status(500).json({ message: "Error al crear inventario", error });
+    }
+};
+
+exports.update = async (req, res) => {
+    const IdInventario = req.params.IdInventario;
+    if (!IdInventario) {
+        return res.status(400).json({ message: "Falta el parámetro IdInventario" });
+    }
+    try {
+        const updated = await inventarioServices.update(IdInventario, req.body);
+        if (!updated) {
+            return res.status(404).json({ message: "Inventario no encontrado" });
         }
+        res.status(200).json({ message: "Inventario actualizado exitosamente" });
+    } catch (error) {
+        res.status(500).json({ message: "Error al actualizar inventario", error });
     }
+};
 
-    async changePassword(req, res) {
-        try {
-            const { oldPassword, newPassword } = req.body;
-            await inventarioService.changePassword(req.inventario.id, oldPassword, newPassword);
-            res.json({ message: 'Contraseña actualizada correctamente' });
-        } catch (error) {
-            res.status(400).json({ message: error.message });
+exports.remove = async (req, res) => {
+    const IdInventario = req.params.IdInventario;
+    if (!IdInventario) {
+        return res.status(400).json({ message: "Falta el parámetro IdInventario" });
+    }
+    try {
+        const removed = await inventarioServices.remove(IdInventario);
+        if (!removed) {
+            return res.status(404).json({ message: "Inventario no encontrado" });
         }
+        res.status(200).json({ message: "Inventario eliminado exitosamente" });
+    } catch (error) {
+        res.status(500).json({ message: "Error al eliminar inventario", error });
     }
-
-    async getDashboard(req, res) {
-        try {
-            const dashboard = await inventarioService.getDashboard(req.inventario.id);
-            res.json(dashboard);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    }
-}
-
-module.exports = new inventarioController();
+};

@@ -1,8 +1,8 @@
-const ventaDetService = require('../services/ventaDet.services'); 
+const ventaDetServices = require('../services/ventaDet.services');
 
 exports.findAll = async (req, res) => {
     try {
-        const ventaDets = await ventaDetService.findAll();
+        const ventaDets = await ventaDetServices.findAll();
         res.status(200).json(ventaDets);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener ventaDet", error });
@@ -12,7 +12,7 @@ exports.findAll = async (req, res) => {
 exports.findById = async (req, res) => {
     const IdVentaD = req.params.IdVentaD;
     try {
-        const ventaDet = await ventaDetService.findById(req.params.IdVentaD);
+        const ventaDet = await ventaDetServices.findById(IdVentaD);
         if (!ventaDet) {
             return res.status(404).json({ message: "ventaDet no encontrado" });
         }
@@ -24,8 +24,8 @@ exports.findById = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const newventaDet = await ventaDetService.create(req.body);
-        res.status(201).json(newventaDet);
+        const newVentaDet = await ventaDetServices.create(req.body);
+        res.status(201).json(newVentaDet);
     } catch (error) {
         res.status(500).json({ message: "Error al crear ventaDet", error });
     }
@@ -33,8 +33,8 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updatedventaDet = await ventaDetService.update(req.params.id, req.body);
-        if (!updatedventaDet) {
+        const updatedVentaDet = await ventaDetServices.update(req.params.IdVentaD, req.body);
+        if (!updatedVentaDet) {
             return res.status(404).json({ message: "ventaDet no encontrado" });
         }
         res.status(200).json({ message: "ventaDet actualizado exitosamente" });
@@ -45,7 +45,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await ventaDetService.remove(req.params.IdVentaD);
+        const removed = await ventaDetServices.remove(req.params.IdVentaD);
         if (!removed) {
             return res.status(404).json({ message: "ventaDet no encontrado" });
         }

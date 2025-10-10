@@ -4,9 +4,8 @@ const userRoutes = require('./routes/user.routes');
 const empleadosRoutes = require('./routes/empleados.routes');
 const inventarioRoutes = require('./routes/inventario.routes');
 const metodopagoRoutes = require('./routes/metodopago.routes'); 
-//const authRoutes = require('./routes/auth.routes');
+// const authRoutes = require('./routes/auth.routes');
 
-// Initialize express app
 const app = express();
 
 // Middleware
@@ -36,13 +35,13 @@ app.get('/health', (req, res) => {
 });
 
 // API Routes
-//app.use('/api/auth', authRoutes);
+// app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/empleados', empleadosRoutes);
 app.use('/api/inventario', inventarioRoutes);
 app.use('/api/metodopago', metodopagoRoutes);
 
-// Handle undefined routes - FIXED: Using correct Express syntax
+// Handle undefined routes
 app.use((req, res) => {
     res.status(404).json({ 
         message: `No se puede encontrar ${req.originalUrl} en este servidor!` 
@@ -60,44 +59,40 @@ app.use((err, req, res, next) => {
 
 // Server configuration
 const PORT = process.env.PORT || 3000;
+const ENV = process.env.NODE_ENV || 'development';
+const BASE_URL = `http://localhost:${PORT}`;
 
 // Start server
 const server = app.listen(PORT, () => {
     console.log('=================================');
     console.log(`Server running on port ${PORT}`);
-    console.log(` Environment: ${process.env.NODE_ENV}`);
+    console.log(` Environment: ${ENV}`);
     console.log('=================================');
-    console.log('Available routes:');
-    //console.log('AUTH ROUTES:');
-    //console.log('POST /api/auth/register - Register new user');
-    //console.log('POST /api/auth/login - Login user');
+
     console.log('\nUSER ROUTES:');
-    console.log('GET /api/users/profile - Get user profile (protected)');
-    console.log('PUT /api/users/update - Update user profile (protected)');
-    console.log('DELETE /api/users/delete - Delete user (protected)');
-    console.log('GET /api/users/dashboard - Get user dashboard (protected)');
+    console.log(`GET ${BASE_URL}/api/users/profile - Get user profile (protected)`);
+    console.log(`PUT ${BASE_URL}/api/users/update - Update user profile (protected)`);
+    console.log(`DELETE ${BASE_URL}/api/users/delete - Delete user (protected)`);
+    console.log(`GET ${BASE_URL}/api/users/dashboard - Get user dashboard (protected)`);
 
-     console.log('\nEMPLEADO ROUTES:');
-    console.log('GET /api/empleado - Get all empleados');
-    console.log('POST /api/empleado - Create empleado');
-    console.log('PUT /api/empleado/:id - Update empleado');
-    console.log('DELETE /api/empleado/:id - Delete empleado');
+    console.log('\nEMPLEADOS ROUTES:');
+    console.log(`GET ${BASE_URL}/api/empleados - Get all empleados`);
+    console.log(`POST ${BASE_URL}/api/empleados - Create empleado`);
+    console.log(`PUT ${BASE_URL}/api/empleados/:id - Update empleado`);
+    console.log(`DELETE ${BASE_URL}/api/empleados/:id - Delete empleado`);
     console.log('=================================');
 
-     console.log('\nINVENTARIO ROUTES:');
-    console.log('GET /api/inventario - Get all inventarios');
-    console.log('POST /api/inventario - Create inventario');
-    console.log('PUT /api/inventario/:id - Update inventario');
-    console.log('DELETE /api/inventario/:id - Delete inventario');
+    console.log('\nINVENTARIO ROUTES:');
+    console.log(`GET ${BASE_URL}/api/inventario - Get all inventarios`);
+    console.log(`POST ${BASE_URL}/api/inventario - Create inventario`);
+    console.log(`PUT ${BASE_URL}/api/inventario/:id - Update inventario`);
+    console.log(`DELETE ${BASE_URL}/api/inventario/:id - Delete inventario`);
     console.log('=================================');
 
-    
-     console.log('\nmetodopago ROUTES:');
-    console.log('GET /api/metodopago - Get all metodopagos');
-    console.log('POST /api/metodopago - Create metodopago');
-    console.log('PUT /api/metodopago/:id - Update metodopago');
-    console.log('DELETE /api/metodopago/:id - Delete metodopago');
+    console.log('\nMETODOPAGO ROUTES:');
+    console.log(`GET ${BASE_URL}/api/metodopago - Get all metodopagos`);
+    console.log(`POST ${BASE_URL}/api/metodopago - Create metodopago`);
+    console.log(`PUT ${BASE_URL}/api/metodopago/:id - Update metodopago`);
+    console.log(`DELETE ${BASE_URL}/api/metodopago/:id - Delete metodopago`);
     console.log('=================================');
 });
-
-module.exports = app;

@@ -11,22 +11,20 @@
 //module.exports = router;
 
 
-
+// src/routes/empleados.routes.js
 const express = require('express');
 const router = express.Router();
-const empleadosController = require('../controllers/empleados.controller');
+const empleadosController = require('../controllers/empleados.controllers');
 const verifyToken = require('../middleware/auth.middleware');
 
-// Rutas públicas
-router.get('/public-profile/:id', empleadosController.getPublicProfile);
+// ✅ Rutas públicas
+router.get('/', empleadosController.findAll);
+router.get('/:IdEmpleado', empleadosController.findById);
 
-// Rutas privadas (protegidas)
-router.get('/profile', verifyToken, empleadosController.getProfile);
-router.put('/update', verifyToken, empleadosController.update);
-router.delete('/delete', verifyToken, empleadosController.delete);
-router.get('/dashboard', verifyToken, empleadosController.getDashboard);
-router.post('/change-password', verifyToken, empleadosController.changePassword);
+// ✅ Rutas privadas (protegidas)
+router.post('/', verifyToken, empleadosController.create);
+router.put('/:IdEmpleado', verifyToken, empleadosController.update);
+router.delete('/:IdEmpleado', verifyToken, empleadosController.remove);
 
 module.exports = router;
-
 
