@@ -1,32 +1,60 @@
-const db = require('../config/db.config');
+const mysql = require('mysql2/promise');
+const config = require('../config/db.config');
 
-exports.findAll = async () => {
-    const [rows] = await db.execute('SELECT * FROM tipodoc');
-    return rows;
-};
+class TipoDocService {
+    constructor() {
+        this.connection = mysql.createPool(config.db);
+    }
 
-exports.findById = async (IdTipoDoc) => {
-    const [rows] = await db.execute('SELECT * FROM tipodoc WHERE IdTipoDoc = ?', [IdTipoDoc]);
-    return rows[0];
-};
+    // PUBLICO
+    async findAll() {
+        const [rows] = await this.connection.execute('SELECT * FROM tipodoc');
+        return rows;
+    }
 
-exports.create = async (newtipodoc) => { 
-    const [result] = await db.execute(
-        'INSERT INTO tipodoc (IdTipoDoc, NomTipoDoc) VALUES (?, ?)',
-        [newtipodoc.IdTipoDoc, newtipodoc.NomTipoDoc]
-    );
-    return { id: result.insertId, ...newtipodoc };
-};
+    async findById(IdTipoDoc) {
+        const [rows] = await this.connection.execute(
+            'SELECT * FROM tipodoc WHERE IdTipoDoc = ?',
+            [IdTipoDoc]
+        );
+        return rows[0];
+    }
 
-exports.update = async (IdTipoDoc, updatedtipodoc) => {
-    const [result] = await db.execute(
-        'UPDATE tipodoc SET  NomTipoDoc = ? WHERE IdTipoDoc= ?',
-        [updatedtipodoc.NomTipoDoc, IdTipoDoc]
-    );
-    return result.affectedRows > 0;
-};
+    // PRIVADOS 
+    async create(newTipoDoc) {
+        const { IdTipoDoc, NomTipoDoc } = newTipoDoc;
 
-exports.remove = async (IdTipoDoc) => {
-    const [result] = await db.execute('DELETE FROM tipodoc WHERE IdTipoDoc = ?', [IdTipoDoc]);
-    return result.affectedRows > 0;
-};
+        const [result] = await this.connection.execute(
+            'INSERT INTO tipodoc (IdTipoDoc, NomTipoDoc) VALUES (?, ?)',
+            [IdTipoDoc, NomTipoDoc]
+        );
+
+        return {
+            id: result.insertId,
+            IdTipoDoc,
+            NomTipoDoc
+        };
+    }
+
+    async update(IdTipoDoc, updatedTipoDoc) {
+        const { NomTipoDoc } = updatedTipoDoc;
+
+        const [result] = await this.connection.execute(
+            'UPDATE tipodoc SET NomTipoDoc = ? WHERE IdTipoDoc = ?',
+            [NomTipoDoc, IdTipoDoc]
+        );
+
+        return result.affectedRows > 0;
+    }
+
+    async delete(IdTipoDoc) {
+        const [result] = await this.connection.execute(
+            'DELETE FROM tipodoc WHERE IdTipoDoc = ?',
+            [IdTipoDoc]
+        );
+
+        return result.affectedRows > 0;
+    }
+}
+
+module.exports = TipoDocService;
