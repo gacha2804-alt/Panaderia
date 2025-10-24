@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const metodopagoController = require('../controllers/metodopago.controllers');
+const metodoPagoController = require('../controllers/metodopago.controllers');
 
-router.get('/', metodopagoController.findAll);
-router.get('/:IdMetodoPago', metodopagoController.findById);
-router.post('/', metodopagoController.create);
-router.put('/:IdMetodoPago', metodopagoController.update);
-router.delete('/:IdMetodoPago', metodopagoController.remove);
+router.get('/', metodoPagoController.findAll);
+router.get('/:id', metodoPagoController.findById);
+router.post('/', metodoPagoController.create);
+router.put('/:id', metodoPagoController.update);
+router.delete('/:id', metodoPagoController.remove);
 
 module.exports = router;

@@ -1,32 +1,86 @@
-const db = require('../config/db.config');
+const mysql = require('mysql2/promise');
+const bcrypt = require('bcryptjs');
+const config = require('../config/db.config');
 
-exports.findAll = async () => {
-    const [rows] = await db.execute('SELECT * FROM inventario');
-    return rows;
-};
+class InventarioService {
+    constructor() {
+        this.connection = mysql.createPool(config.db);
+    }
 
-exports.findById = async (IdInventario) => {
-    const [rows] = await db.execute('SELECT * FROM inventario WHERE IdInventario = ?', [IdInventario]);
-    return rows[0];
-};
+    async findByIdInventario(IdInventario) {
+        const [rows] = await this.connection.execute(
+            'SELECT * FROM inventario WHERE IdInventario = ?',
+            [IdInventario]
+        );
+        return rows[0];
+    }
 
-exports.create = async (newinventario) => {
-    const [result] = await db.execute(
-        'INSERT INTO inventario ( Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida) VALUES ( ?, ?, ?, ?, ?)',
-        [ newinventario.Descripcion, newinventario.TipoProductos, newinventario.Cantidad, newinventario.FechaEntrada, newinventario.FechaSalida]
-    );
-    return { id: result.insertId, ...newinventario };
-};
+    async create(inventarioData) {
+        const { Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida } = inventarioData;
 
-exports.update = async (IdInventario, updatedinventario) => {
-    const [result] = await db.execute(
-        'UPDATE inventario SET  Descripcion = ?, TipoProductos = ?, Cantidad = ?, FechaEntrada = ?, FechaSalida = ? WHERE Idinventario = ?',
-        [updatedinventario.Descripcion, updatedinventario.TipoProductos, updatedinventario.Cantidad, updatedinventario.FechaEntrada, updatedinventario.FechaSalida, IdInventario]
-    );
-    return result.affectedRows > 0;
-};
+        const [result] = await this.connection.execute(
+            'INSERT INTO inventario (Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida) VALUES (?, ?, ?, ?, ?)',
+            [Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida]
+        );
 
-exports.remove = async (IdInventario) => {
-    const [result] = await db.execute('DELETE FROM inventario WHERE IdInventario = ?', [IdInventario]);
-    return result.affectedRows > 0;
-};
+        return {
+            IdInventario: result.insertId,
+            Descripcion,
+            TipoProductos,
+            Cantidad,
+            FechaEntrada,
+            FechaSalida
+        };
+    }
+
+    async getProfile(IdInventario) {
+        const [rows] = await this.connection.execute(
+            'SELECT IdInventario, Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida FROM inventario WHERE IdInventario = ?',
+            [IdInventario]
+        );
+        return rows[0];
+    }
+
+    async getPublicProfile(IdInventario) {
+        const [rows] = await this.connection.execute(
+            'SELECT IdInventario, Descripcion, TipoProductos FROM inventario WHERE IdInventario = ?',
+            [IdInventario]
+        );
+        return rows[0];
+    }
+
+    async update(IdInventario, inventarioData) {
+        const { Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida } = inventarioData;
+
+        await this.connection.execute(
+            'UPDATE inventario SET Descripcion = ?, TipoProductos = ?, Cantidad = ?, FechaEntrada = ?, FechaSalida = ? WHERE IdInventario = ?',
+            [Descripcion, TipoProductos, Cantidad, FechaEntrada, FechaSalida, IdInventario]
+        );
+
+        return this.getProfile(IdInventario);
+    }
+
+    async delete(IdInventario) {
+        await this.connection.execute(
+            'DELETE FROM inventario WHERE IdInventario = ?',
+            [IdInventario]
+        );
+        return true;
+    }
+
+    async changePassword() {
+        throw new Error('Este método no aplica para inventario.');
+    }
+
+    async getDashboard(IdInventario) {
+        const [inventarioInfo] = await this.connection.execute(
+            'SELECT IdInventario, Descripcion, TipoProductos, Cantidad FROM inventario WHERE IdInventario = ?',
+            [IdInventario]
+        );
+        return {
+            inventario: inventarioInfo[0]
+        };
+    }
+}
+
+module.exports = InventarioService;

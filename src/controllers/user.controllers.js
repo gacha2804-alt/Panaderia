@@ -1,55 +1,67 @@
-const userService = require('../services/user.services');
+const UserServices = require('../services/user.services');
+const userServices = new UserServices();
 
-exports.findAll = async (req, res) => {
-    try {
-        const users = await userService.findAll();
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener usuarios", error });
-    }
-};
+class UserController {
+    async getPublicProfile(req, res) {
+        try {
+            const userId = req.params.id;
+            const profile = await userServices.getPublicProfile(userId);
 
-exports.findById = async (req, res) => {
-    try {
-        const user = await userService.findById(req.params.id);
-        if (!user) {
-            return res.status(404).json({ message: "Usuario no encontrado" });
+            if (!profile) {
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+            res.json(profile);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener el usuario", error });
     }
-};
 
-exports.create = async (req, res) => {
-    try {
-        const newUser = await userService.create(req.body);
-        res.status(201).json(newUser);
-    } catch (error) {
-        res.status(500).json({ message: "Error al crear usuario", error });
-    }
-};
-
-exports.update = async (req, res) => {
-    try {
-        const updated = await userService.update(req.params.id, req.body);
-        if (!updated) {
-            return res.status(404).json({ message: "Usuario no encontrado" });
+    async getProfile(req, res) {
+        try {
+            const profile = await userServices.getProfile(req.user.id);
+            res.json(profile);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
-        res.status(200).json({ message: "Usuario actualizado exitosamente" });
-    } catch (error) {
-        res.status(500).json({ message: "Error al actualizar usuario", error });
     }
-};
 
-exports.remove = async (req, res) => {
-    try {
-        const removed = await userService.remove(req.params.id);
-        if (!removed) {
-            return res.status(404).json({ message: "Usuario no encontrado" });
+    async update(req, res) {
+        try {
+            const updatedUser = await userServices.update(req.user.id, req.body);
+            res.json(updatedUser);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
-        res.status(200).json({ message: "Usuario eliminado exitosamente" });
-    } catch (error) {
-        res.status(500).json({ message: "Error al eliminar usuario", error });
     }
-};
+
+    async delete(req, res) {
+        try {
+            await userServices.delete(req.user.id);
+            res.json({ message: 'Usuario eliminado correctamente' });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async changePassword(req, res) {
+        try {
+            const { oldPassword, newPassword } = req.body;
+            await userServices.changePassword(req.user.id, oldPassword, newPassword);
+            res.json({ message: 'Contraseña actualizada correctamente' });
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
+    async getDashboard(req, res) {
+        try {
+            const dashboard = await userServices.getDashboard(req.user.id);
+            res.json(dashboard);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+}
+
+module.exports = new UserController();

@@ -1,32 +1,87 @@
-const db = require('../config/db.config');
+const mysql = require('mysql2/promise');
+const bcrypt = require('bcryptjs');
+const config = require('../config/db.config');
 
-exports.findAll = async () => {
-    const [rows] = await db.execute('SELECT * FROM metodopago');
-    return rows;
-};
+class MetodoPagoService {
+    constructor() {
+        this.connection = mysql.createPool(config.db);
+    }
 
-exports.findById = async (IdMetodoPago) => {
-    const [rows] = await db.execute('SELECT * FROM metodopago WHERE IdMetodoPago = ?', [IdMetodoPago]);
-    return rows[0];
-};
+    // Buscar método de pago por IdMetodoPago (equivalente a findById)
+    async findByIdMetodoPago(IdMetodoPago) {
+        const [rows] = await this.connection.execute(
+            'SELECT * FROM metodopago WHERE IdMetodoPago = ?',
+            [IdMetodoPago]
+        );
+        return rows[0];
+    }
 
-exports.create = async (newmetodopago) => {
-    const [result] = await db.execute(
-        'INSERT INTO metodopago ( NombMetodoPago) VALUES (? )',
-        [ newmetodopago.NombMetodoPago]
-    );
-    return { id: result.insertId, ...newmetodopago };
-};
+    // Crear nuevo método de pago
+    async create(metodoPagoData) {
+        const { NombMetodoPago } = metodoPagoData;
 
-exports.update = async (IdMetodoPago, updatedmetodopago) => {
-    const [result] = await db.execute(
-        'UPDATE metodopago SET NombMetodoPago = ? WHERE IdMetodoPago = ?',
-        [ updatedmetodopago.NombMetodoPago, IdMetodoPago]
-    );
-    return result.affectedRows > 0;
-};
+        const [result] = await this.connection.execute(
+            'INSERT INTO metodopago (NombMetodoPago) VALUES (?)',
+            [NombMetodoPago]
+        );
 
-exports.remove = async (IdMetodoPago) => {
-    const [result] = await db.execute('DELETE FROM metodopago WHERE IdMetodoPago= ?', [IdMetodoPago]); 
-    return result.affectedRows > 0;
-};
+        return {
+            IdMetodoPago: result.insertId,
+            NombMetodoPago
+        };
+    }
+
+    async getProfile(IdMetodoPago) {
+        const [rows] = await this.connection.execute(
+            'SELECT IdMetodoPago, NombMetodoPago FROM metodopago WHERE IdMetodoPago = ?',
+            [IdMetodoPago]
+        );
+        return rows[0];
+    }
+
+    async getPublicProfile(IdMetodoPago) {
+        const [rows] = await this.connection.execute(
+            'SELECT IdMetodoPago, NombMetodoPago FROM metodopago WHERE IdMetodoPago = ?',
+            [IdMetodoPago]
+        );
+        return rows[0];
+    }
+
+    async update(IdMetodoPago, metodoPagoData) {
+        const { NombMetodoPago } = metodoPagoData;
+
+        await this.connection.execute(
+            'UPDATE metodopago SET NombMetodoPago = ? WHERE IdMetodoPago = ?',
+            [NombMetodoPago, IdMetodoPago]
+        );
+
+        return this.getProfile(IdMetodoPago);
+    }
+
+    // Eliminar método de pago
+    async delete(IdMetodoPago) {
+        await this.connection.execute(
+            'DELETE FROM metodopago WHERE IdMetodoPago = ?',
+            [IdMetodoPago]
+        );
+        return true;
+    }
+
+    // Cambiar contraseña (no aplica aquí, pero se deja para mantener la estructura)
+    async changePassword() {
+        throw new Error('Este método no aplica para métodos de pago.');
+    }
+
+    // Dashboard del método de pago (similar al UserService)
+    async getDashboard(IdMetodoPago) {
+        const [rows] = await this.connection.execute(
+            'SELECT IdMetodoPago, NombMetodoPago FROM metodopago WHERE IdMetodoPago = ?',
+            [IdMetodoPago]
+        );
+        return {
+            metodoPago: rows[0]
+        };
+    }
+}
+
+module.exports = MetodoPagoService;

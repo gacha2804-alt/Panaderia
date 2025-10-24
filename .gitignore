@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Dependencies
 /node_modules
 /npm-debug.log*
@@ -35,14 +36,36 @@
 # Environment files
 # Es CRUCIAL ignorar el archivo .env ya que contiene secretos (JWT_SECRRET, claves der BD, etc.)
 .env 
+=======
+# Dependencies
+node_modules/
+/npm-debug.log*
+/yarn-error.log*
+#Production/Build files
+/dist
+/build
+# Environment files
+# Es CRUCIAL ignorar el archivo .env ya que contiene secretos (JWT_SECRET, claves de BD, etc.)
+.env
+>>>>>>> emelin
 # Runtime data
 /pids
 /logs
 *.pid
 *.seed
+<<<<<<< HEAD
 *.log 
 # Editor/OS specific files (Archivods temporales del sistema o del autor)
 .DS_Store
 .vscode/
 # Nodemon ( si genera archivos temporales especifgivos, aunque generalmente no es necesario)
 >>>>>>> camila
+=======
+*.log
+#Editor/OS apecific files (Archivos temporales del sistema o del editor)
+.DS_Store
+.vscode/
+# Nodemon (si genera archivos temporales especificos, aunque generalmente no es necesario)
+.nodemon 
+
+>>>>>>> emelin
