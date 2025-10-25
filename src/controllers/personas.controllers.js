@@ -10,14 +10,18 @@ exports.findAll = async (req, res) => {
 };
 
 exports.findById = async (req, res) => {
+    const IdPersona = req.params.IdPersona;
+    if (!IdPersona) {
+        return res.status(400).json({ message: "Falta el parámetro IdPersona" });
+    }
     try {
-        const persona = await personasService.findById(req.params.IdPersona);
+        const persona = await personasService.findById(IdPersona);
         if (!persona) {
             return res.status(404).json({ message: "Persona no encontrada" });
         }
         res.status(200).json(persona);
     } catch (error) {
-        res.status(500).json({ message: "Error al obtener persona", error });
+        res.status(500).json({ message: "Error al obtener la persona", error });
     }
 };
 
@@ -44,11 +48,11 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const deleted = await personasService.remove(req.params.IdPersona);
-        if (!deleted) {
+        const removed = await personasService.remove(req.params.IdPersona);
+        if (!removed) {
             return res.status(404).json({ message: "Persona no encontrada" });
         }
-        res.status(200).json({ message: "Persona eliminada correctamente" });
+        res.status(200).json({ message: "Persona eliminada exitosamente" });
     } catch (error) {
         res.status(500).json({ message: "Error al eliminar persona", error });
     }

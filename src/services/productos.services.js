@@ -10,19 +10,18 @@ exports.findById = async (IdProducto) => {
     return rows[0];
 };
 
-exports.create = async (newproductos) => {
-    
+exports.create = async (newProducto) => {
     const [result] = await db.execute(
         'INSERT INTO producto (NombreProducto, Cantidad, ValorUnitario, FechaVencimiento) VALUES (?, ?, ?, ?)',
-        [newproductos.NombreProducto, newproductos.Cantidad, newproductos.ValorUnitario, newproductos.FechaVencimiento]
+        [newProducto.NombreProducto, newProducto.Cantidad, newProducto.ValorUnitario, newProducto.FechaVencimiento]
     );
-    return { id: result.insertId, ...newproductos };
+    return { IdProducto: result.insertId, ...newProducto };
 };
 
-exports.update = async (IdProducto, updatedproductos) => {
+exports.update = async (IdProducto, updatedProducto) => {
     const [result] = await db.execute(
         'UPDATE producto SET NombreProducto = ?, Cantidad = ?, ValorUnitario = ?, FechaVencimiento = ? WHERE IdProducto = ?',
-        [updatedproductos.NombreProducto, updatedproductos.Cantidad, updatedproductos.ValorUnitario, updatedproductos.FechaVencimiento, IdProducto]
+        [updatedProducto.NombreProducto, updatedProducto.Cantidad, updatedProducto.ValorUnitario, updatedProducto.FechaVencimiento, IdProducto]
     );
     return result.affectedRows > 0;
 };

@@ -10,18 +10,18 @@ exports.findById = async (IdVenta) => {
     return rows[0];
 };
 
-exports.create = async (newVentaEncab) => {
+exports.create = async (ventaEncab) => {
     const [result] = await db.execute(
         'INSERT INTO ventaEncab (Fecha, IdCliente, Total) VALUES (?, ?, ?)',
-        [newVentaEncab.Fecha, newVentaEncab.IdCliente, newVentaEncab.Total]
+        [ventaEncab.Fecha, ventaEncab.IdCliente, ventaEncab.Total]
     );
-    return { IdVenta: result.insertId, ...newVentaEncab };
+    return { IdVenta: result.insertId, ...ventaEncab };
 };
 
-exports.update = async (IdVenta, updatedVentaEncab) => {
+exports.update = async (IdVenta, ventaEncab) => {
     const [result] = await db.execute(
         'UPDATE ventaEncab SET Fecha = ?, IdCliente = ?, Total = ? WHERE IdVenta = ?',
-        [updatedVentaEncab.Fecha, updatedVentaEncab.IdCliente, updatedVentaEncab.Total, IdVenta]
+        [ventaEncab.Fecha, ventaEncab.IdCliente, ventaEncab.Total, IdVenta]
     );
     return result.affectedRows > 0;
 };

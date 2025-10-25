@@ -1,70 +1,49 @@
 const ventaEncabService = require('../services/ventaEncab.services');
 
-class VentaEncabController {
-    // PUBLICAS
-    async findAll(req, res) {
-        try {
-            const ventaEncabs = await ventaEncabService.findAll();
-            res.status(200).json(ventaEncabs);
-        } catch (error) {
-            res.status(500).json({ message: "Error al obtener ventaEncab", error });
-        }
+exports.findAll = async (req, res) => {
+    try {
+        const data = await ventaEncabService.findAll();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener los registros', error });
     }
+};
 
-    
-    async findById(req, res) {
-        const IdVenta = req.params.IdVenta;
-        if (!IdVenta) {
-            return res.status(400).json({ message: "Falta el parámetro IdVenta" });
-        }
-        try {
-            const ventaEncab = await ventaEncabService.findById(IdVenta);
-            if (!ventaEncab) {
-                return res.status(404).json({ message: "ventaEncab no encontrado" });
-            }
-            res.status(200).json(ventaEncab);
-        } catch (error) {
-            res.status(500).json({ message: "Error al obtener ventaEncab", error });
-        }
+exports.findById = async (req, res) => {
+    try {
+        const data = await ventaEncabService.findById(req.params.IdVenta);
+        if (!data) return res.status(404).json({ message: 'Registro no encontrado' });
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener el registro', error });
     }
+};
 
-    // PRIVADAS
-    async create(req, res) {
-        try {
-            const newVentaEncab = await ventaEncabService.create(req.body);
-            res.status(201).json(newVentaEncab);
-        } catch (error) {
-            res.status(500).json({ message: "Error al crear ventaEncab", error });
-        }
+exports.create = async (req, res) => {
+    try {
+        const nuevo = await ventaEncabService.create(req.body);
+        res.status(201).json(nuevo);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al crear el registro', error });
     }
+};
 
-    
-    async update(req, res) {
-        const IdVenta = req.params.IdVenta;
-        try {
-            const updated = await ventaEncabService.update(IdVenta, req.body);
-            if (!updated) {
-                return res.status(404).json({ message: "ventaEncab no encontrado" });
-            }
-            res.status(200).json({ message: "ventaEncab actualizado exitosamente" });
-        } catch (error) {
-            res.status(500).json({ message: "Error al actualizar ventaEncab", error });
-        }
+exports.update = async (req, res) => {
+    try {
+        const actualizado = await ventaEncabService.update(req.params.IdVenta, req.body);
+        if (!actualizado) return res.status(404).json({ message: 'Registro no encontrado' });
+        res.json({ message: 'Registro actualizado correctamente' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al actualizar el registro', error });
     }
+};
 
-    
-    async remove(req, res) {
-        const IdVenta = req.params.IdVenta;
-        try {
-            const removed = await ventaEncabService.remove(IdVenta);
-            if (!removed) {
-                return res.status(404).json({ message: "ventaEncab no encontrado" });
-            }
-            res.status(200).json({ message: "ventaEncab eliminado exitosamente" });
-        } catch (error) {
-            res.status(500).json({ message: "Error al eliminar ventaEncab", error });
-        }
+exports.remove = async (req, res) => {
+    try {
+        const eliminado = await ventaEncabService.remove(req.params.IdVenta);
+        if (!eliminado) return res.status(404).json({ message: 'Registro no encontrado' });
+        res.json({ message: 'Registro eliminado correctamente' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al eliminar el registro', error });
     }
-}
-
-module.exports = new VentaEncabController();
+};

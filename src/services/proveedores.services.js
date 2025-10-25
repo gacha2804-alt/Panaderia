@@ -5,29 +5,28 @@ exports.findAll = async () => {
     return rows;
 };
 
-exports.findById = async (Idproveedor) => {
-    const [rows] = await db.execute('SELECT * FROM proveedores WHERE Idproveedors = ?', [Idproveedor]);
+exports.findById = async (IdProveedor) => {
+    const [rows] = await db.execute('SELECT * FROM proveedores WHERE IdProveedor = ?', [IdProveedor]);
     return rows[0];
 };
 
-exports.create = async (newproveedores) => {
+exports.create = async (newProveedor) => {
     const [result] = await db.execute(
-        'INSERT INTO proveedores (TipoProducto) VALUES ( ?)',
-        [ newproveedores.TipoProducto]
+        'INSERT INTO proveedores (TipoProducto) VALUES (?)',
+        [newProveedor.TipoProducto]
     );
-    return { id: result.insertId, ...newproveedores };
+    return { id: result.insertId, ...newProveedor };
 };
 
-exports.update = async (Idproveedor, updatedproveedores) => {
+exports.update = async (IdProveedor, updatedProveedor) => {
     const [result] = await db.execute(
-        'UPDATE proveedores SET TipoProducto= ? WHERE Idproveedor = ?',
-        [ updatedproveedores.TipoProducto, Idproveedor]
+        'UPDATE proveedores SET TipoProducto = ? WHERE IdProveedor = ?',
+        [updatedProveedor.TipoProducto, IdProveedor]
     );
     return result.affectedRows > 0;
 };
 
-exports.remove = async (Idproveedor) => {
-    const [result] = await db.execute('DELETE FROM proveedores WHERE Idproveedor= ?', [Idproveedor]);
-
+exports.remove = async (IdProveedor) => {
+    const [result] = await db.execute('DELETE FROM proveedores WHERE IdProveedor = ?', [IdProveedor]);
     return result.affectedRows > 0;
 };

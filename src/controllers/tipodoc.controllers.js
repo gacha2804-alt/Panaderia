@@ -2,7 +2,6 @@ const TipoDocService = require('../services/tipodoc.services');
 const tipoDocService = new TipoDocService();
 
 class TipoDocController {
-    //  PUBLICO
     async getAll(req, res) {
         try {
             const tipodocs = await tipoDocService.findAll();
@@ -30,7 +29,6 @@ class TipoDocController {
         }
     }
 
-    //  PRIVADO 
     async create(req, res) {
         try {
             const newTipoDoc = await tipoDocService.create(req.body);

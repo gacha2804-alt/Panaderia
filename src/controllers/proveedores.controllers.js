@@ -1,59 +1,56 @@
 const proveedoresService = require('../services/proveedores.services');
 
+
 exports.findAll = async (req, res) => {
     try {
         const proveedores = await proveedoresService.findAll();
         res.status(200).json(proveedores);
     } catch (error) {
-        res.status(500).json({ message: "Error al obtener proveedores", error });
+        res.status(500).json({ message: 'Error al obtener los proveedores', error });
     }
 };
-//valida que el id este presente
+
 exports.findById = async (req, res) => {
-    const Idproveedor = req.params.Idproveedor;
-    if (!Idproveedor) {
-        return res.status(400).json({ message: "Falta el parámetro Idproveedor" });
-    }
     try {
-        const proveedores = await proveedoresService.findById(Idproveedor);
-        if (!proveedores) {
-            return res.status(404).json({ message: "proveedores no encontrado" });
+        const proveedor = await proveedoresService.findById(req.params.IdProveedor);
+        if (!proveedor) {
+            return res.status(404).json({ message: 'Proveedor no encontrado' });
         }
-        res.status(200).json(proveedores);
+        res.status(200).json(proveedor);
     } catch (error) {
-        res.status(500).json({ message: "Error al obtener el proveedores", error });
+        res.status(500).json({ message: 'Error al obtener el proveedor', error });
     }
 };
 
 exports.create = async (req, res) => {
     try {
-        const newproveedores = await proveedoresService.create(req.body);
-        res.status(201).json(newproveedores);
+        const nuevoProveedor = await proveedoresService.create(req.body);
+        res.status(201).json(nuevoProveedor);
     } catch (error) {
-        res.status(500).json({ message: "Error al crear proveedores", error });
+        res.status(500).json({ message: 'Error al crear el proveedor', error });
     }
 };
 
 exports.update = async (req, res) => {
     try {
-        const updatedproveedores= await proveedoresService.update(req.params.Idproveedor, req.body);
-        if (!updatedproveedores) {
-            return res.status(404).json({ message: "proveedores no encontrado" });
+        const actualizado = await proveedoresService.update(req.params.IdProveedor, req.body);
+        if (!actualizado) {
+            return res.status(404).json({ message: 'Proveedor no encontrado' });
         }
-        res.status(200).json({ message: "proveedores actualizado exitosamente" });
+        res.status(200).json({ message: 'Proveedor actualizado correctamente' });
     } catch (error) {
-        res.status(500).json({ message: "Error al actualizar proveedores", error });
+        res.status(500).json({ message: 'Error al actualizar el proveedor', error });
     }
 };
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await proveedoresService.remove(req.params.Idproveedor);
-        if (!removed) {
-            return res.status(404).json({ message: "proveedores no encontrado" });
+        const eliminado = await proveedoresService.remove(req.params.IdProveedor);
+        if (!eliminado) {
+            return res.status(404).json({ message: 'Proveedor no encontrado' });
         }
-        res.status(200).json({ message: "proveedores eliminado exitosamente" });
+        res.status(200).json({ message: 'Proveedor eliminado correctamente' });
     } catch (error) {
-        res.status(500).json({ message: "proveedores al eliminar usuario", error });
+        res.status(500).json({ message: 'Error al eliminar el proveedor', error });
     }
 };

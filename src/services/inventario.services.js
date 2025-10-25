@@ -20,7 +20,7 @@ exports.create = async (newinventario) => {
 
 exports.update = async (IdInventario, updatedinventario) => {
     const [result] = await db.execute(
-        'UPDATE inventario SET  Descripcion = ?, TipoProductos = ?, Cantidad = ?, FechaEntrada = ?, FechaSalida = ? WHERE Idinventario = ?',
+        'UPDATE inventario SET  Descripcion = ?, TipoProductos = ?, Cantidad = ?, FechaEntrada = ?, FechaSalida = ? WHERE IdInventario = ?',
         [updatedinventario.Descripcion, updatedinventario.TipoProductos, updatedinventario.Cantidad, updatedinventario.FechaEntrada, updatedinventario.FechaSalida, IdInventario]
     );
     return result.affectedRows > 0;

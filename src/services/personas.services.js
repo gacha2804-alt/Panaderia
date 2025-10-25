@@ -6,50 +6,47 @@ exports.findAll = async () => {
 };
 
 exports.findById = async (IdPersona) => {
-    const [rows] = await db.execute(
-        'SELECT * FROM personas WHERE IdPersona = ?',
-        [IdPersona]
-    );
+    const [rows] = await db.execute('SELECT * FROM personas WHERE IdPersona = ?', [IdPersona]);
     return rows[0];
 };
 
-exports.create = async (newUser) => {
+exports.create = async (newPersona) => {
     const [result] = await db.execute(
         `INSERT INTO personas 
-        (IdPersona,Nombre1, Nombre2, Apellido1, Apellido2, Direccion, Celular1, Email, Cargo, Contrasena) 
+        (IdPersona, Nombre1, Nombre2, Apellido1, Apellido2, Direccion, Celular1, Email, Cargo, Contrasena) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-            newUser.IdPersona,
-            newUser.Nombre1,
-            newUser.Nombre2,
-            newUser.Apellido1,
-            newUser.Apellido2,
-            newUser.Direccion,
-            newUser.Celular1,
-            newUser.Email,
-            newUser.Cargo,
-            newUser.Contrasena 
+            newPersona.IdPersona,
+            newPersona.Nombre1,
+            newPersona.Nombre2,
+            newPersona.Apellido1,
+            newPersona.Apellido2,
+            newPersona.Direccion,
+            newPersona.Celular1,
+            newPersona.Email,
+            newPersona.Cargo,
+            newPersona.Contrasena
         ]
     );
-    return { IdPersona: result.insertId, ...newUser };
+    return { IdPersona: result.insertId, ...newPersona };
 };
 
-exports.update = async (IdPersona, updatedUser) => {
+exports.update = async (IdPersona, updatedPersona) => {
     const [result] = await db.execute(
         `UPDATE personas 
-        SET IdPersona=?, Nombre1 = ?, Nombre2 = ?, Apellido1 = ?, Apellido2 = ?, Direccion = ?, Celular1 = ?, Email = ?, Cargo = ?, Contrasena = ? 
-        WHERE IdPersona = ?`,
+        SET IdPersona=?, Nombre1=?, Nombre2=?, Apellido1=?, Apellido2=?, Direccion=?, Celular1=?, Email=?, Cargo=?, Contrasena=? 
+        WHERE IdPersona=?`,
         [
-            updatedUser.IdPersona,
-            updatedUser.Nombre1,
-            updatedUser.Nombre2,
-            updatedUser.Apellido1,
-            updatedUser.Apellido2,
-            updatedUser.Direccion,
-            updatedUser.Celular1,
-            updatedUser.Email,
-            updatedUser.Cargo,
-            updatedUser.Contrasena,
+            updatedPersona.IdPersona,
+            updatedPersona.Nombre1,
+            updatedPersona.Nombre2,
+            updatedPersona.Apellido1,
+            updatedPersona.Apellido2,
+            updatedPersona.Direccion,
+            updatedPersona.Celular1,
+            updatedPersona.Email,
+            updatedPersona.Cargo,
+            updatedPersona.Contrasena,
             IdPersona
         ]
     );
@@ -57,9 +54,6 @@ exports.update = async (IdPersona, updatedUser) => {
 };
 
 exports.remove = async (IdPersona) => {
-    const [result] = await db.execute(
-        'DELETE FROM personas WHERE IdPersona = ?',
-        [IdPersona]
-    );
+    const [result] = await db.execute('DELETE FROM personas WHERE IdPersona = ?', [IdPersona]);
     return result.affectedRows > 0;
 };

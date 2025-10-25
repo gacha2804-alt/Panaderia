@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const tipoDocController = require('../controllers/tipodoc.controllers');
-const verifyToken = require('../middleware/auth.middleware'); 
+const verifyToken = require('../auth.middleware');
 
-// Rutas públicas 
-router.get('/', tipoDocController.findAll);             
-router.get('/:IdTipoDoc', tipoDocController.findById);  
 
-// Rutas privadas 
-router.post('/', verifyToken, tipoDocController.create);           
-router.put('/:IdTipoDoc', verifyToken, tipoDocController.update);  
-router.delete('/:IdTipoDoc', verifyToken, tipoDocController.remove); 
+
+router.get('/public/tipodoc', tipoDocController.getAll);
+router.get('/public/tipodoc/:IdTipoDoc', tipoDocController.getById);
+
+
+router.post('/private/tipodoc', verifyToken, tipoDocController.create);
+router.put('/private/tipodoc/:IdTipoDoc', verifyToken, tipoDocController.update);
+router.delete('/private/tipodoc/:IdTipoDoc', verifyToken, tipoDocController.delete);
 
 module.exports = router;

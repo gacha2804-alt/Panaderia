@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-
 const inventarioController = require('../controllers/inventario.controllers');
+const verifyToken = require('../auth.middleware');
 
 
-router.get('/', inventarioController.findAll);
-router.get('/:IdInventario', inventarioController.findById);
-router.post('/', inventarioController.create);
-router.put('/:IdInventario', inventarioController.update);
-router.delete('/:IdInventario', inventarioController.remove);
+//  Rutas protegidas
+router.get('/', verifyToken, inventarioController.findAll);
+router.get('/:IdInventario', verifyToken, inventarioController.findById);
+router.post('/', verifyToken, inventarioController.create);
+router.put('/:IdInventario', verifyToken, inventarioController.update);
+router.delete('/:IdInventario', verifyToken, inventarioController.remove);
 
 module.exports = router;

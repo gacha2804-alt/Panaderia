@@ -27,6 +27,6 @@ exports.update = async (id, updatedUser) => {
 };
 
 exports.remove = async (id) => {
-    const [result] = await db.execute('DELETE FROM user WHERE id = ?', [id]);
+    const [result] = await db.execute('DELETE FROM users WHERE id = ?', [id]);
     return result.affectedRows > 0;
 };
