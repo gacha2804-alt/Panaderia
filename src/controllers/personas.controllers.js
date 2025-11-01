@@ -1,5 +1,6 @@
 const personasServices = require('../services/personas.services');
 
+
 exports.findAll = async (req, res) => {
     try {
         const personas = await personasServices.findAll();
@@ -9,8 +10,9 @@ exports.findAll = async (req, res) => {
     }
 };
 
+//  Obtener una persona por su ID
 exports.findById = async (req, res) => {
-    const IdPersona = req.params.IdPersona;
+    const IdPersona = req.params.id; 
     if (!IdPersona) {
         return res.status(400).json({ message: "Falta el parámetro IdPersona" });
     }
@@ -25,6 +27,7 @@ exports.findById = async (req, res) => {
     }
 };
 
+//  Crear una nueva persona
 exports.create = async (req, res) => {
     try {
         const newPersona = await personasServices.create(req.body);
@@ -34,8 +37,9 @@ exports.create = async (req, res) => {
     }
 };
 
+//  Actualizar una persona
 exports.update = async (req, res) => {
-    const IdPersona = req.params.IdPersona;
+    const IdPersona = req.params.id;
     if (!IdPersona) {
         return res.status(400).json({ message: "Falta el parámetro IdPersona" });
     }
@@ -50,8 +54,9 @@ exports.update = async (req, res) => {
     }
 };
 
+// ✅ Eliminar una persona
 exports.remove = async (req, res) => {
-    const IdPersona = req.params.IdPersona;
+    const IdPersona = req.params.id;
     if (!IdPersona) {
         return res.status(400).json({ message: "Falta el parámetro IdPersona" });
     }
@@ -64,4 +69,30 @@ exports.remove = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error al eliminar persona", error });
     }
+};
+
+//  Perfil público (por ID)
+exports.getPublicProfile = async (req, res) => {
+    const IdPersona = req.params.id;
+    res.status(200).json({ message: `Perfil público de la persona ${IdPersona}` });
+};
+
+//  Perfil del usuario autenticado
+exports.getProfile = async (req, res) => {
+    res.status(200).json({ message: "Perfil privado del usuario autenticado" });
+};
+
+//  Eliminar perfil (usuario autenticado)
+exports.delete = async (req, res) => {
+    res.status(200).json({ message: "Perfil del usuario eliminado correctamente" });
+};
+
+// Dashboard 
+exports.getDashboard = async (req, res) => {
+    res.status(200).json({ message: "Dashboard de la persona autenticada" });
+};
+
+//  Cambiar contraseña 
+exports.changePassword = async (req, res) => {
+    res.status(200).json({ message: "Contraseña cambiada correctamente" });
 };

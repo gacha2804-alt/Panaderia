@@ -70,7 +70,7 @@ class EmpleadoService {
         return true;
     }
 
-    // Cambiar contraseña (no aplica realmente aquí, pero lo dejo para que coincida con la estructura)
+    // Cambiar contraseña (no aplica realmente aquí, pero lo dejamos para que coincida con la estructura)
     async changePassword() {
         throw new Error('Este método no aplica para empleados porque no tienen contraseña.');
     }

@@ -67,7 +67,7 @@ class MetodoPagoService {
         return true;
     }
 
-    // Cambiar contraseña (no aplica aquí, pero se deja para mantener la estructura)
+    // Cambiar contraseña (no aplica aquí, pero se dejamos para mantener la estructura)
     async changePassword() {
         throw new Error('Este método no aplica para métodos de pago.');
     }

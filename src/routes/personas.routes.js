@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const personasController = require('../controllers/personas.controller');
+const personasController = require('../controllers/personas.controllers');
 const verifyToken = require('../middleware/auth.middleware');
 
-<<<<<<< HEAD
+
 // Rutas públicas
 router.get('/public-profile/:id', personasController.getPublicProfile);
-=======
+
 router.get('/', personasController.findAll);
 router.get('/:id', personasController.findById);
 router.post('/', personasController.create);
 router.put('/:id', personasController.update);
 router.delete('/:id', personasController.remove);
->>>>>>> emelin
 
 // Rutas privadas (protegidas)
 router.get('/profile', verifyToken, personasController.getProfile);
